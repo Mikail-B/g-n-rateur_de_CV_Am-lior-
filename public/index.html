@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.css" />
+    <title>générateur de CV</title>
+  </head>
+  <body>
+    <main>
+      <h1>Générateur de CV</h1>
+      <button onclick="changerTheme('theme-classique')">Classique</button>
+      <button onclick="changerTheme('theme-Bleu')">Bleu</button>
+      <button onclick="changerTheme('theme-Rouge')">Rouge</button>
+      <p>remplis toutes les cases</p>
+<form action="/api/generate-cv" method="post">
+        <input
+        type="hidden"
+        id="themeChoisi"
+        name="themeChoisi"
+        value="theme-classique"
+    >        <section>
+          <h2>Informations générales</h2>
+          <input id="Nom"name="Nom" type="text" placeholder="Nom" />
+          <input id="prenom"name="prenom" type="text" placeholder="Prenom" />
+          <input id="titrepro"name="titrepro" type="text" placeholder="Titre professionnel" />
+          <input id="mail"name="mail" type="text" placeholder="Adresse email" />
+          <input id="tel"name="tel" type="text" placeholder="Numéro de téléphone" />
+          <input
+            id="resumerpro" name="resumerpro"
+            type="text"
+            placeholder="Description / résumé professionnel"
+          />
+        </section>
+        <section id="experiences-form">
+          <h2>Expériences professionnelles</h2>
+          <div class="experience-group">
+            <input class="poste" name="poste[]" type="text" placeholder="Intitulé du poste" />
+            <input class="entreprise" name="entreprise[]" type="text" placeholder="Nom de l'entreprise" />
+            <input class="dateD" name="dateD[]" type="text" placeholder="Date de début" />
+            <input class="dateF" name="dateF[]" type="text" placeholder="Date de fin facultative" />
+            <input class="Description" name="Description[]" type="text" placeholder="Description des missions" />
+          </div>
+          <button type="button" id="add-experience">Ajouter une expérience</button>
+        </section>
+        <section id="formations-form">
+          <h3>Formations</h3>
+          <div class="formation-group">
+            <input class="Diplome" name="Diplome[]" type="text" placeholder="Intitulé du diplôme ou de la formation" />
+            <input class="Etablissement" name="Etablissement[]" type="text" placeholder="Établissement" />
+            <input class="DatedDiplome" name="DatedDiplome[]" type="text" placeholder="Date de début" />
+            <input class="DatefDiplome" name="DatefDiplome[]" type="text" placeholder="Date de fin facultative" />
+            <input class="Descriptionf" name="Descriptionf[]" type="text" placeholder="Description" />
+          </div>
+          <button type="button" id="add-formation">Ajouter une formation</button>
+        </section>
+        <section id="competences-form">
+          <h4>Compétences</h4>
+          <div class="competence-group">
+            <input class="NC" name="NC[]" type="text" placeholder="Nom de la compétence" />
+            <input class="Niveau" name="Niveau[]" type="text" placeholder="Niveau" />
+          </div>
+          <button type="button" id="add-competence">Ajouter une compétence</button>
+        </section>
+      <button type="submit">Télécharger</button>
+      </form>
+    </main>
+<section
+    id="CVcomplete"
+    name="CVcomplete"
+    class="theme-classique">
+          <div id="info"name="info">
+        <h5>Informations générales</h5>
+        <p id="valnom"name="valnom"></p>
+        <p id="valprenom"name="valprenom"></p>
+        <p id="valtitrepro"name="valtitrepro"></p>
+        <p id="valmail"name="valmail"></p>
+        <p id="valtel"name="valtel"></p>
+        <p id="valresumerpro"name="valresumerpro"></p>
+      </div>
+      <div class="contenu-cv">
+        <div id="ExpériencesApercu"name="ExpériencesApercu">
+          <h5>Expériences professionnelles</h5>
+          <div id="valExperiences"></div>
+        </div>
+        <div>
+          <h5>Formations</h5>
+          <div id="valFormations"></div>
+        </div>
+        <div>
+          <h5>Compétences</h5>
+          <div id="valCompetences"></div>
+        </div>
+      </div>
+    </section>
+    <script>
+      function getValue(group, selector) { //get value sert a récupere la valeur 
+        return group.querySelector(selector)?.value || "";
+      }
+
+      function createParagraph(text, strong = false) {
+        const p = document.createElement("p");
+        if (strong) {
+          const b = document.createElement("strong");
+          b.textContent = text;
+          p.appendChild(b);
+        } else {
+          p.textContent = text;
+        }
+        return p;
+      }
+
+      function renderGroups(groupSelector, targetId, fields) { //renderGroups sert a créée un bloc pour des seection par exemple
+        const target = document.getElementById(targetId);
+        target.innerHTML = "";
+
+        document.querySelectorAll(groupSelector).forEach(function (group) {
+          const hasContent = fields.some(function (field) {
+            return getValue(group, field.selector).trim() !== "";
+          });
+
+          if (!hasContent) {
+            return;
+          }
+
+          const wrapper = document.createElement("div");
+          wrapper.className = "preview-item";
+
+          fields.forEach(function (field) {
+            const value = getValue(group, field.selector);
+            if (value.trim() !== "") {
+              wrapper.appendChild(createParagraph(value, field.strong));
+            }
+          });
+
+          target.appendChild(wrapper);
+        });
+      }
+
+      function updatePreview() {
+        document.getElementById("valnom").textContent = document.getElementById("Nom").value;
+        document.getElementById("valprenom").textContent = document.getElementById("prenom").value;
+        document.getElementById("valtitrepro").textContent = document.getElementById("titrepro").value;
+        document.getElementById("valmail").textContent = document.getElementById("mail").value;
+        document.getElementById("valtel").textContent = document.getElementById("tel").value;
+        document.getElementById("valresumerpro").textContent = document.getElementById("resumerpro").value;
+
+        renderGroups(".experience-group", "valExperiences", [
+          { selector: ".poste", strong: true },
+          { selector: ".entreprise" },
+          { selector: ".dateD" },
+          { selector: ".dateF" },
+          { selector: ".Description" },
+        ]);
+
+        renderGroups(".formation-group", "valFormations", [
+          { selector: ".Diplome", strong: true },
+          { selector: ".Etablissement" },
+          { selector: ".DatedDiplome" },
+          { selector: ".DatefDiplome" },
+          { selector: ".Descriptionf" },
+        ]);
+
+        renderGroups(".competence-group", "valCompetences", [
+          { selector: ".NC", strong: true },
+          { selector: ".Niveau" },
+        ]);
+      }
+
+      function addGroup(containerId, groupClass) {
+        const container = document.getElementById(containerId);
+        const firstGroup = container.querySelector("." + groupClass);
+        const newGroup = firstGroup.cloneNode(true);
+
+        newGroup.querySelectorAll("input").forEach(function (input) {
+          input.value = "";
+        });
+
+        container.insertBefore(newGroup, container.querySelector("button"));
+        updatePreview();
+      }
+
+      document.querySelector("form").addEventListener("input", updatePreview);
+      document.getElementById("add-experience").addEventListener("click", function () {
+        addGroup("experiences-form", "experience-group");
+      });
+      document.getElementById("add-formation").addEventListener("click", function () {
+        addGroup("formations-form", "formation-group");
+      });
+      document.getElementById("add-competence").addEventListener("click", function () {
+        addGroup("competences-form", "competence-group");
+      });
+    </script>
+    <script>
+      
+function changerTheme(theme) { //permet de cahngé les couleur du cv
+    const apercu = document.getElementById("CVcomplete");
+
+    apercu.classList.remove(
+        "theme-classique",
+        "theme-Bleu",
+        "theme-Rouge"
+    );
+
+    apercu.classList.add(theme);
+
+    document.getElementById("themeChoisi").value = theme;
+}
+    </script>
+  </body>
+</html>
