@@ -1,0 +1,161 @@
+
+<!doctype html>
+<html lang='fr'>
+<head>
+<meta charset='UTF-8'>
+<style>
+@page {
+    margin: 0;
+}
+
+html,
+body {
+    height: 297mm;
+}
+
+body {
+    margin: 0;
+    font-family: DejaVu Sans, Arial, sans-serif;
+    font-size: 12px;
+    color: #222;
+}
+
+.cv {
+    width: 100%;
+    height: 297mm;
+    border-collapse: collapse;
+    position: relative;
+}
+
+.info,
+.contenu-cv {
+    vertical-align: top;
+    padding: 28px;
+}
+
+.info {
+    width: 34%;
+    color: #fff;
+}
+
+.side-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 34%;
+    height: 297mm;
+    background-color: black;
+}
+
+.theme-Bleu .side-bg {
+    background-color: rgb(9, 84, 182);
+}
+
+.theme-Rouge .side-bg {
+    background-color: rgb(182, 9, 9);
+}
+
+.contenu-cv {
+    width: 66%;
+}
+
+h1 {
+    font-size: 24px;
+    margin: 0 0 6px;
+}
+
+h5 {
+    font-size: 17px;
+    margin: 0 0 10px;
+}
+
+.section {
+    margin-bottom: 24px;
+}
+
+.item {
+    margin-bottom: 16px;
+}
+
+p {
+    margin: 0 0 7px;
+    line-height: 1.35;
+}
+
+.label {
+    font-weight: bold;
+    margin-top: 12px;
+}
+</style>
+</head>
+<body class='theme-Rouge'>
+    <div class='side-bg'></div>
+    <table class='cv'>
+        <tr>
+            <td class='info'>
+                <h5>Informations générales</h5>
+                <h1>Mikail Bayraktar</h1>
+                <p>titre</p>
+                <p>mikailbayraktar@gmail.com</p>
+                <p>numero</p>
+                <p class='label'>Résumé professionnel</p>
+                <p>description</p>
+            </td>
+            <td class='contenu-cv'>
+                <div class='section'>
+                    <h5>Expériences professionnelles</h5>
+                    
+                    <div class='item'>
+                        <p><strong>intitulé</strong></p>
+                        <p>nom</p>
+                        <p>date - date</p>
+                        <p>description</p>
+                    </div>
+
+                    <div class='item'>
+                        <p><strong>intilé</strong></p>
+                        <p>nom</p>
+                        <p>dat - date</p>
+                        <p>description</p>
+                    </div>
+
+                    <div class='item'>
+                        <p><strong>intitulé du poste </strong></p>
+                        <p>Mikail Bayraktar</p>
+                        <p>date  - date</p>
+                        <p>description</p>
+                    </div>
+
+                </div>
+                <div class='section'>
+                    <h5>Formations</h5>
+                    
+                    <div class='item'>
+                        <p><strong>intitulé</strong></p>
+                        <p>etablissement</p>
+                        <p>date - date</p>
+                        <p>description</p>
+                    </div>
+
+                    <div class='item'>
+                        <p><strong>intitulé de formation</strong></p>
+                        <p>etablissement</p>
+                        <p>date</p>
+                        <p></p>
+                    </div>
+
+                </div>
+                <div class='section'>
+                    <h5>Compétences</h5>
+                    
+                    <div class='item'>
+                        <p><strong>nom</strong></p>
+                        <p>niveau</p>
+                    </div>
+
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
